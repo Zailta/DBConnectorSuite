@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import com.dbconnector.app.repository.DataAccessJPAInterface;
 import com.dbconnector.app.repository.implementation.DataAccessJDBC;
 
+import jakarta.transaction.Transactional;
+
 @Component
 public class DBConnectorRunner implements CommandLineRunner{
 	@Autowired
@@ -15,15 +17,18 @@ public class DBConnectorRunner implements CommandLineRunner{
 	DataAccessJPAInterface accessJPAInterface;
 
 	@Override
+	@Transactional // Add this to ensure transaction is closing
 	public void run(String... args) throws Exception {
 		
 		System.out.println("Executing runner: DBConnectorRunner.run()");
 		
-		accessJDBC.getAllUsersUsingJDBCTemplate().forEach(System.out::println);
+		/*
+		 * accessJDBC.getAllUsersUsingJDBCTemplate().forEach(System.out::println);
+		 * accessJPAInterface.findAll().forEach(System.out::println);
+		 * accessJDBC.getAllUsersUsingSimpleJDBCCall().forEach(System.out::println);
+		 */
 		
-		accessJPAInterface.findAll().forEach(System.out::println);
-		
-		
+		accessJPAInterface.getAllBauserEntityRecords().forEach(System.out::println);
 		
 		
 		
