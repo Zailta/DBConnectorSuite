@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.stereotype.Repository;
@@ -25,6 +27,7 @@ public class DataAccessJDBC{
 
 	public static final String GET_ALL_USERS = "SELECT * FROM javadb.bauser_entity";
 	public static final String GET_ALL_USERS_SP = "GetAllBauserEntityRecords";
+	public static final String GET__USERS__PARAMETERISED_SP = "FindUserByEmail";
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -67,6 +70,32 @@ public class DataAccessJDBC{
 		});
 
 		Map<String, Object> output = jdbcCall.execute();
+
+		List<UserEntity> userList = (List<UserEntity>) output.get("result");
+		return userList;
+	}
+	
+	
+	public List<UserEntity> getUsersUsingParameterisedSP() {
+
+		jdbcCall.setProcedureName(GET__USERS__PARAMETERISED_SP);
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("input_email", "cba@accenture.com");
+
+		jdbcCall.returningResultSet("result", (RowMapper<UserEntity>) (rs, row) -> {
+
+			UserEntity userEntity = new UserEntity();
+			userEntity.setUser_id(rs.getString("user_id"));
+			userEntity.setFirstname(rs.getString("firstname"));
+			userEntity.setEmail(rs.getString("email"));
+			userEntity.setAbout(rs.getString("about"));
+
+			return userEntity;
+
+		});
+
+		Map<String, Object> output = jdbcCall.execute(parameter);
 
 		List<UserEntity> userList = (List<UserEntity>) output.get("result");
 		return userList;
