@@ -6,6 +6,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -14,8 +15,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +39,21 @@ public class DataAccessJDBC{
 	SimpleJdbcCall jdbcCall;
 	@Autowired
 	DataSource dataSource;
+	
+	@Autowired
+	SimpleJdbcInsert jdbcInsert;
+	
+	
+	public void insertUsingJDBCSimpleInsert() {
+		jdbcInsert.setTableName("bauser_entity");
+		UserEntity entity = new UserEntity();
+		entity.setUser_id(UUID.randomUUID().toString());
+		entity.setFirstname("MB");
+		entity.setEmail("abc@gmail.com");
+		entity.setAbout("This is inserted through JDBC Insert");
+		jdbcInsert.execute(new BeanPropertySqlParameterSource(entity));
+		
+	}
 
 	public List<UserEntity> getAllUsersUsingJDBCTemplate() {
 		return jdbcTemplate.query(GET_ALL_USERS, (ResultSetExtractor<List<UserEntity>>) rs -> {
@@ -84,7 +102,7 @@ public class DataAccessJDBC{
 		.declareParameters(new SqlParameter("input_email", Types.VARCHAR));
 		
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
-		parameter.addValue("input_email", "cba@accenture.com");
+		parameter.addValue("input_email", "abc@gmail.com");
 
 		jdbcCall.returningResultSet("result", (RowMapper<UserEntity>) (rs, row) -> {
 

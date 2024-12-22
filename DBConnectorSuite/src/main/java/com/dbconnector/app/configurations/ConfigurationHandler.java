@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 @Configuration
 public class ConfigurationHandler {
@@ -35,5 +36,10 @@ public class ConfigurationHandler {
 	@Bean
 	SimpleJdbcCall getSimpleJdbcTemplate() {
 		return new SimpleJdbcCall(getDataSource());
+	}
+	
+	@Bean
+	SimpleJdbcInsert getSimpleJdbcInsert() {
+		return new SimpleJdbcInsert(getDataSource());
 	}
 }

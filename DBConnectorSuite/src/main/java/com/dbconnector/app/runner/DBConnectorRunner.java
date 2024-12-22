@@ -32,7 +32,9 @@ public class DBConnectorRunner implements CommandLineRunner{
 		
 		//accessJDBC.getAllUsersUsingMapQuery().forEach(System.out::println);
 		
-		accessJDBC.getUsersUsingParameterisedSP().forEach(System.out::println);
+		//accessJDBC.getUsersUsingParameterisedSP().forEach(System.out::println);
+		
+		accessJDBC.insertUsingJDBCSimpleInsert();
 		
 	}
 
