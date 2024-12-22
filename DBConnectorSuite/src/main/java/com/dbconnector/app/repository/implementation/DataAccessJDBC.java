@@ -2,6 +2,7 @@ package com.dbconnector.app.repository.implementation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,9 @@ public class DataAccessJDBC{
 	
 	public List<UserEntity> getUsersUsingParameterisedSP() {
 
-		jdbcCall.setProcedureName(GET__USERS__PARAMETERISED_SP);
+		jdbcCall.
+		withProcedureName(GET__USERS__PARAMETERISED_SP)
+		.declareParameters(new SqlParameter("input_email", Types.VARCHAR));
 		
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("input_email", "cba@accenture.com");
