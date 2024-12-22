@@ -28,9 +28,9 @@ public class DBConnectorRunner implements CommandLineRunner{
 		 * accessJDBC.getAllUsersUsingSimpleJDBCCall().forEach(System.out::println);
 		 */
 		
-		accessJPAInterface.getAllBauserEntityRecords().forEach(System.out::println);
+		//accessJPAInterface.getAllBauserEntityRecords().forEach(System.out::println);
 		
-		
+		accessJDBC.getAllUsersUsingMapQuery().forEach(System.out::println);
 		
 	}
 
